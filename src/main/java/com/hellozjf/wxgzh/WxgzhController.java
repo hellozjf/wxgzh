@@ -52,6 +52,7 @@ public class WxgzhController {
             String toUser = document.getElementsByTagName("ToUserName").item(0).getTextContent();
             String fromUser = document.getElementsByTagName("FromUserName").item(0).getTextContent();
             String content = "test";
+            // todo 这个response还有问题，没有<CDATA>标签
             String response = getResponse(toUser, fromUser, content);
             log.debug("response = {}", response);
             return response;
