@@ -1,13 +1,11 @@
 package com.hellozjf.wxgzh;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Test;
 
-@SpringBootTest
-class WxgzhApplicationTests {
+public class WxgzhApplicationTests extends BaseTest {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
     }
 
 }

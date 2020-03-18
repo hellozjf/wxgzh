@@ -6,6 +6,7 @@ import cn.hutool.core.util.XmlUtil;
 import cn.hutool.crypto.digest.DigestAlgorithm;
 import cn.hutool.crypto.digest.Digester;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,12 +49,19 @@ public class WxgzhController {
         log.debug("Handle Post webdata is {}", data);
         // 后台打日志
         Document document = XmlUtil.parseXml(data);
-        if (document.getElementsByTagName("MsgType").item(0).getTextContent().equalsIgnoreCase("text")) {
-            String toUser = document.getElementsByTagName("ToUserName").item(0).getTextContent();
-            String fromUser = document.getElementsByTagName("FromUserName").item(0).getTextContent();
-            String content = "test";
-            // todo 这个response还有问题，没有<CDATA>标签
-            String response = getResponse(toUser, fromUser, content);
+        // 这里toUser和fromUser要反一下
+        String fromUser = document.getElementsByTagName("ToUserName").item(0).getTextContent();
+        String toUser = document.getElementsByTagName("FromUserName").item(0).getTextContent();
+        String msgType = document.getElementsByTagName("MsgType").item(0).getTextContent();
+        if (msgType.equalsIgnoreCase("text")) {
+            String content = document.getElementsByTagName("Content").item(0).getTextContent();
+            String response = getTextResponse(toUser, fromUser, content);
+            log.debug("response = {}", response);
+            return response;
+        } else if (msgType.equalsIgnoreCase("image")) {
+            String picUrl = document.getElementsByTagName("PicUrl").item(0).getTextContent();
+            String mediaId = document.getElementsByTagName("MediaId").item(0).getTextContent();
+            String response = getImageResponse(toUser, fromUser, picUrl, mediaId);
             log.debug("response = {}", response);
             return response;
         } else {
@@ -62,29 +70,42 @@ public class WxgzhController {
         }
     }
 
-    private String getResponse(String toUser, String fromUser, String content) {
-        Document document = XmlUtil.createXml("xml");
+    /**
+     * 获取图片处理结果
+     * @param toUser
+     * @param fromUser
+     * @param picUrl
+     * @param mediaId
+     * @return
+     */
+    private String getImageResponse(String toUser, String fromUser, String picUrl, String mediaId) {
+        String xml = "<xml>\n" +
+                "                <ToUserName><![CDATA[%s]]></ToUserName>\n" +
+                "                <FromUserName><![CDATA[%s]]></FromUserName>\n" +
+                "                <CreateTime>%d</CreateTime>\n" +
+                "                <MsgType><![CDATA[image]]></MsgType>\n" +
+                "                <Image>\n" +
+                "                <MediaId><![CDATA[%s]]></MediaId>\n" +
+                "                </Image>\n" +
+                "            </xml>";
+        return String.format(xml, toUser, fromUser, DateUtil.currentSeconds(), mediaId);
+    }
 
-        Element toUserNameElement = document.createElement("ToUserName");
-        toUserNameElement.setTextContent(toUser);
-        document.getDocumentElement().appendChild(toUserNameElement);
-
-        Element fromUserNameElement = document.createElement("FromUserName");
-        fromUserNameElement.setTextContent(fromUser);
-        document.getDocumentElement().appendChild(fromUserNameElement);
-
-        Element createTimeElement = document.createElement("CreateTime");
-        createTimeElement.setTextContent(String.valueOf(DateUtil.currentSeconds()));
-        document.getDocumentElement().appendChild(createTimeElement);
-
-        Element msgTypeElement = document.createElement("MsgType");
-        msgTypeElement.setTextContent("text");
-        document.getDocumentElement().appendChild(msgTypeElement);
-
-        Element contentElement = document.createElement("Content");
-        contentElement.setTextContent(content);
-        document.getDocumentElement().appendChild(contentElement);
-
-        return XmlUtil.format(document);
+    /**
+     * 获取文本处理结果
+     * @param toUser
+     * @param fromUser
+     * @param content
+     * @return
+     */
+    private String getTextResponse(String toUser, String fromUser, String content) {
+        String xml = "            <xml>\n" +
+                "                <ToUserName><![CDATA[%s]]></ToUserName>\n" +
+                "                <FromUserName><![CDATA[%s]]></FromUserName>\n" +
+                "                <CreateTime>%d</CreateTime>\n" +
+                "                <MsgType><![CDATA[text]]></MsgType>\n" +
+                "                <Content><![CDATA[%s]]></Content>\n" +
+                "            </xml>";
+        return String.format(xml, toUser, fromUser, DateUtil.currentSeconds(), content);
     }
 }
