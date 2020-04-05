@@ -1,6 +1,9 @@
 package com.hellozjf.wxgzh;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hellozjf.wxgzh.service.MediaService;
+import com.hellozjf.wxgzh.service.TokenService;
+import com.hellozjf.wxgzh.vo.TempImageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;

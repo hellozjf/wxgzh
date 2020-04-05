@@ -1,4 +1,4 @@
-package com.hellozjf.wxgzh;
+package com.hellozjf.wxgzh.controller;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.HexUtil;
@@ -25,7 +25,7 @@ public class WxgzhController {
 
     @GetMapping("/wx")
     public String getWx(String signature, String timestamp, String nonce, String echostr) throws UnsupportedEncodingException {
-        String token = "hellozjf123456";
+        String token = "sosjpeudrm47zcxiwuc0axtugffzdzid";
 
         List<String> list = Arrays.asList(token, timestamp, nonce);
         Collections.sort(list);

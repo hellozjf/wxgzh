@@ -1,6 +1,7 @@
-package com.hellozjf.wxgzh;
+package com.hellozjf.wxgzh.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hellozjf.wxgzh.vo.TempImageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -14,6 +15,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 
+/**
+ * 多媒体服务
+ * @author Jingfeng Zhou
+ */
 @Slf4j
 @Service
 public class MediaService {

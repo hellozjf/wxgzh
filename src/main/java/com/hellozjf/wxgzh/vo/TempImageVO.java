@@ -1,4 +1,4 @@
-package com.hellozjf.wxgzh;
+package com.hellozjf.wxgzh.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

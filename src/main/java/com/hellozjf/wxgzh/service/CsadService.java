@@ -1,7 +1,6 @@
-package com.hellozjf.wxgzh;
+package com.hellozjf.wxgzh.service;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.crypto.digest.Digester;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,8 @@ import java.util.Map;
 
 /**
  * 客服服务
+ * 个人用户不能用
+ * @author Jingfeng Zhou
  */
 @Service
 @Slf4j

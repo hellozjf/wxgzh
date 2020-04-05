@@ -1,4 +1,4 @@
-package com.hellozjf.wxgzh;
+package com.hellozjf.wxgzh.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
